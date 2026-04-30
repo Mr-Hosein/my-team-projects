@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMD Portal - Welcome</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="cmd-body">
+    <div class="cmd-container">
+        <div class="cmd-screen">
+            <div class="cmd-header">
+                <span class="cmd-title">Microsoft Windows [Version 10.0.22621.6060]</span>
+                <span class="cmd-close">✕</span>
+            </div>
+            <div class="cmd-content">
+                <div class="cmd-line">
+                    <span class="cmd-path">C:\Users\Visitor&gt;</span>
+                    <span class="cmd-text"></span>
+                </div>
+                <div class="output-line" id="output"></div>
+                
+                <!-- پیام خوش‌آمدگویی -->
+                <div class="welcome-message" id="welcomeMsg">
+                    <div class="ascii-art">
+                        ╔══════════════════════════════════════════╗<br>
+                        ║     WELCOME TO MY PORTFOLIO TERMINAL      ║<br>
+                        ╚══════════════════════════════════════════╝
+                    </div>
+                    <div class="cmd-prompt">
+                        <span class="prompt-sign">C:\Users\Visitor&gt;</span>
+                        <span class="blinking-cursor">_</span>
+                    </div>
+                    <div class="instruction">
+                        Please type <span class="cmd-highlight">START</span> and press Enter to continue...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // المنت‌های صفحه
+        const welcomeMsg = document.getElementById('welcomeMsg');
+        let userInput = '';
+        
+        // ساخت input مخفی برای دریافت ورودی
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'text';
+        hiddenInput.id = 'hiddenInput';
+        hiddenInput.style.position = 'absolute';
+        hiddenInput.style.opacity = '0';
+        hiddenInput.style.left = '-9999px';
+        document.body.appendChild(hiddenInput);
+        
+        // فوکوس روی input مخفی
+        hiddenInput.focus();
+        
+        // دریافت ورودی از کاربر
+        hiddenInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const command = hiddenInput.value.trim().toUpperCase();
+                hiddenInput.value = '';
+                
+                if (command === 'START') {
+                    // هدایت به صفحه اصلی
+                    window.location.href = 'home.html';
+                } else if (command !== '') {
+                    // پیام خطا برای دستور اشتباه
+                    alert('Invalid command! Please type START to continue.');
+                }
+            }
+        });
+        
+        // اطمینان از فوکوس روی صفحه
+        document.body.addEventListener('click', function() {
+            hiddenInput.focus();
+        });
+        
+        // نمایش cursor چشمک زن
+        function updateCursor() {
+            const cursor = document.querySelector('.blinking-cursor');
+            if (cursor) {
+                cursor.style.opacity = cursor.style.opacity === '0' ? '1' : '0';
+            }
+        }
+        
+        setInterval(updateCursor, 500);
+    </script>
+</body>
+</html>
