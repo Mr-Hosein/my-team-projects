@@ -14,12 +14,8 @@
                 <span class="cmd-close">✕</span>
             </div>
             <div class="cmd-content">
-                <div class="cmd-line">
-                    <span class="cmd-path">C:\Users\Visitor&gt;</span>
-                    <span class="cmd-text"></span>
-                </div>
                 <div class="output-line" id="output"></div>
-                
+
                 <!-- پیام خوش‌آمدگویی -->
                 <div class="welcome-message" id="welcomeMsg">
                     <div class="ascii-art">
@@ -29,7 +25,7 @@
                     </div>
                     <div class="cmd-prompt">
                         <span class="prompt-sign">C:\Users\Visitor&gt;</span>
-                        <span class="blinking-cursor">_</span>
+                        <span class="cmd-typed" id="cmdTyped"></span><span class="blinking-cursor">_</span>
                     </div>
                     <div class="instruction">
                         Please type <span class="cmd-highlight">START</span> and press Enter to continue...
@@ -42,8 +38,10 @@
     <script>
         // المنت‌های صفحه
         const welcomeMsg = document.getElementById('welcomeMsg');
-        let userInput = '';
-        
+
+        // المنتی که متن تایپ‌شده رو نشون میده (کنار پرامپت پایینی)
+        const cmdTyped = document.getElementById('cmdTyped');
+
         // ساخت input مخفی برای دریافت ورودی
         const hiddenInput = document.createElement('input');
         hiddenInput.type = 'text';
@@ -53,24 +51,21 @@
         hiddenInput.style.left = '-9999px';
         document.body.appendChild(hiddenInput);
 
-        // المنتی که باید متن تایپ‌شده رو نشون بده
-        const cmdTextSpan = document.querySelector('.cmd-text');
-        
         // فوکوس روی input مخفی
         hiddenInput.focus();
 
-        // هر بار کاربر تایپ می‌کنه، متن رو توی صفحه نشون بده
+        // هر بار کاربر تایپ می‌کنه، متن رو کنار پرامپت نشون بده
         hiddenInput.addEventListener('input', function() {
-            cmdTextSpan.textContent = hiddenInput.value;
+            cmdTyped.textContent = hiddenInput.value;
         });
-        
+
         // دریافت ورودی از کاربر
         hiddenInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 const command = hiddenInput.value.trim().toUpperCase();
                 hiddenInput.value = '';
-                cmdTextSpan.textContent = ''; // بعد از Enter پاک بشه
-                
+                cmdTyped.textContent = ''; // بعد از Enter پاک بشه
+
                 if (command === 'START') {
                     // هدایت به صفحه اصلی
                     window.location.href = 'home.html';
@@ -80,12 +75,12 @@
                 }
             }
         });
-        
+
         // اطمینان از فوکوس روی صفحه
         document.body.addEventListener('click', function() {
             hiddenInput.focus();
         });
-        
+
         // نمایش cursor چشمک زن
         function updateCursor() {
             const cursor = document.querySelector('.blinking-cursor');
@@ -93,7 +88,7 @@
                 cursor.style.opacity = cursor.style.opacity === '0' ? '1' : '0';
             }
         }
-        
+
         setInterval(updateCursor, 500);
     </script>
 </body>
