@@ -69,6 +69,7 @@
             if (e.key === 'Enter') {
                 const command = hiddenInput.value.trim().toUpperCase();
                 hiddenInput.value = '';
+                cmdTextSpan.textContent = ''; // بعد از Enter پاک بشه
                 
                 if (command === 'START') {
                     // هدایت به صفحه اصلی
