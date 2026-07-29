@@ -5,13 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CMD Portal - Welcome</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* استایل‌های مربوط به درگ کردن و آیکون بستن پنجره */
+        .cmd-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin: 0;
+            cursor: default;
+        }
+
+        .cmd-header {
+            cursor: grab;
+            user-select: none;
+        }
+
+        .cmd-header.dragging {
+            cursor: grabbing;
+        }
+
+        .cmd-close {
+            cursor: pointer;
+        }
+
+        /* آیکون CMD وقتی پنجره بسته میشه */
+        .cmd-taskbar-icon {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            background: #0c0c0c;
+            border: 2px solid #33ff33;
+            border-radius: 10px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(51, 255, 51, 0.4);
+            z-index: 9999;
+        }
+
+        .cmd-taskbar-icon.show {
+            display: flex;
+        }
+
+        .cmd-taskbar-icon span {
+            color: #33ff33;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .cmd-taskbar-icon:hover {
+            box-shadow: 0 0 25px rgba(51, 255, 51, 0.7);
+        }
+    </style>
 </head>
 <body class="cmd-body">
-    <div class="cmd-container">
+    <div class="cmd-container" id="cmdContainer">
         <div class="cmd-screen">
-            <div class="cmd-header">
+            <div class="cmd-header" id="cmdHeader">
                 <span class="cmd-title">Microsoft Windows [Version 10.0.22621.6060]</span>
-                <span class="cmd-close">✕</span>
+                <span class="cmd-close" id="cmdClose">✕</span>
             </div>
             <div class="cmd-content">
                 <div class="output-line" id="output"></div>
@@ -35,9 +92,18 @@
         </div>
     </div>
 
+    <!-- آیکون تسک‌بار برای وقتی که پنجره بسته میشه -->
+    <div class="cmd-taskbar-icon" id="taskbarIcon">
+        <span>C:\</span>
+    </div>
+
     <script>
         // المنت‌های صفحه
         const welcomeMsg = document.getElementById('welcomeMsg');
+        const cmdContainer = document.getElementById('cmdContainer');
+        const cmdHeader = document.getElementById('cmdHeader');
+        const cmdClose = document.getElementById('cmdClose');
+        const taskbarIcon = document.getElementById('taskbarIcon');
 
         // المنتی که متن تایپ‌شده رو نشون میده (کنار پرامپت پایینی)
         const cmdTyped = document.getElementById('cmdTyped');
@@ -76,9 +142,11 @@
             }
         });
 
-        // اطمینان از فوکوس روی صفحه
-        document.body.addEventListener('click', function() {
-            hiddenInput.focus();
+        // اطمینان از فوکوس روی صفحه (فقط وقتی پنجره باز باشه)
+        document.body.addEventListener('click', function(e) {
+            if (cmdContainer.style.display !== 'none') {
+                hiddenInput.focus();
+            }
         });
 
         // نمایش cursor چشمک زن
@@ -90,6 +158,110 @@
         }
 
         setInterval(updateCursor, 500);
+
+        /* ============================
+           قابلیت درگ کردن پنجره (Draggable Window)
+        ============================ */
+        let isDragging = false;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        function setInitialPosition() {
+            // موقعیت اولیه‌ی پنجره رو بر اساس محل فعلیش (وسط صفحه) محاسبه می‌کنیم
+            const rect = cmdContainer.getBoundingClientRect();
+            cmdContainer.style.width = rect.width + 'px';
+            cmdContainer.style.left = rect.left + 'px';
+            cmdContainer.style.top = rect.top + 'px';
+            cmdContainer.style.transform = 'none';
+            cmdContainer.style.margin = '0';
+        }
+
+        cmdHeader.addEventListener('mousedown', function(e) {
+            // اگه روی دکمه‌ی ضربدر کلیک شد، درگ شروع نشه
+            if (e.target === cmdClose) return;
+
+            // اگه اولین باره که پنجره جابه‌جا میشه، موقعیتش رو ثابت کن
+            if (!cmdContainer.style.left) {
+                setInitialPosition();
+            }
+
+            isDragging = true;
+            cmdHeader.classList.add('dragging');
+
+            const rect = cmdContainer.getBoundingClientRect();
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+
+            e.preventDefault();
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (!isDragging) return;
+
+            let newLeft = e.clientX - offsetX;
+            let newTop = e.clientY - offsetY;
+
+            // جلوگیری از خروج کامل پنجره از صفحه
+            const maxLeft = window.innerWidth - 100;
+            const maxTop = window.innerHeight - 50;
+            newLeft = Math.max(-cmdContainer.offsetWidth + 100, Math.min(newLeft, maxLeft));
+            newTop = Math.max(0, Math.min(newTop, maxTop));
+
+            cmdContainer.style.left = newLeft + 'px';
+            cmdContainer.style.top = newTop + 'px';
+        });
+
+        document.addEventListener('mouseup', function() {
+            if (isDragging) {
+                isDragging = false;
+                cmdHeader.classList.remove('dragging');
+            }
+        });
+
+        // پشتیبانی از لمس (موبایل / تبلت)
+        cmdHeader.addEventListener('touchstart', function(e) {
+            if (e.target === cmdClose) return;
+
+            if (!cmdContainer.style.left) {
+                setInitialPosition();
+            }
+
+            isDragging = true;
+            const touch = e.touches[0];
+            const rect = cmdContainer.getBoundingClientRect();
+            offsetX = touch.clientX - rect.left;
+            offsetY = touch.clientY - rect.top;
+        });
+
+        document.addEventListener('touchmove', function(e) {
+            if (!isDragging) return;
+            const touch = e.touches[0];
+
+            let newLeft = touch.clientX - offsetX;
+            let newTop = touch.clientY - offsetY;
+
+            cmdContainer.style.left = newLeft + 'px';
+            cmdContainer.style.top = newTop + 'px';
+        });
+
+        document.addEventListener('touchend', function() {
+            isDragging = false;
+        });
+
+        /* ============================
+           بستن پنجره و نمایش آیکون / بازکردن دوباره
+        ============================ */
+        cmdClose.addEventListener('click', function(e) {
+            e.stopPropagation();
+            cmdContainer.style.display = 'none';
+            taskbarIcon.classList.add('show');
+        });
+
+        taskbarIcon.addEventListener('click', function() {
+            cmdContainer.style.display = 'block';
+            taskbarIcon.classList.remove('show');
+            hiddenInput.focus();
+        });
     </script>
 </body>
 </html>
