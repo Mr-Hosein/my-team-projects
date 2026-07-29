@@ -52,9 +52,17 @@
         hiddenInput.style.opacity = '0';
         hiddenInput.style.left = '-9999px';
         document.body.appendChild(hiddenInput);
+
+        // المنتی که باید متن تایپ‌شده رو نشون بده
+        const cmdTextSpan = document.querySelector('.cmd-text');
         
         // فوکوس روی input مخفی
         hiddenInput.focus();
+
+        // هر بار کاربر تایپ می‌کنه، متن رو توی صفحه نشون بده
+        hiddenInput.addEventListener('input', function() {
+            cmdTextSpan.textContent = hiddenInput.value;
+        });
         
         // دریافت ورودی از کاربر
         hiddenInput.addEventListener('keypress', function(e) {
