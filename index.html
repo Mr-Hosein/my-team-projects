@@ -29,37 +29,87 @@
             cursor: pointer;
         }
 
-        /* آیکون CMD وقتی پنجره بسته میشه */
+        /* آیکون سه‌بعدی CMD وقتی پنجره بسته میشه */
         .cmd-taskbar-icon {
             position: fixed;
-            bottom: 30px;
+            top: 0;
             left: 30px;
-            width: 60px;
-            height: 60px;
-            background: #0c0c0c;
-            border: 2px solid #33ff33;
-            border-radius: 10px;
+            width: 68px;
+            height: 68px;
             display: none;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(51, 255, 51, 0.4);
+            cursor: grab;
             z-index: 9999;
+            border-radius: 16px;
+            background: linear-gradient(145deg, #1e1e1e, #060606);
+            border: 1px solid #262626;
+            box-shadow:
+                6px 6px 14px rgba(0, 0, 0, 0.65),
+                -4px -4px 10px rgba(255, 255, 255, 0.04),
+                inset 0 1px 1px rgba(255, 255, 255, 0.06),
+                0 0 22px rgba(51, 255, 51, 0.35);
+            transition: box-shadow 0.25s ease;
+            touch-action: none;
         }
 
         .cmd-taskbar-icon.show {
             display: flex;
         }
 
-        .cmd-taskbar-icon span {
+        .cmd-taskbar-icon:hover {
+            box-shadow:
+                8px 10px 18px rgba(0, 0, 0, 0.7),
+                -4px -4px 10px rgba(255, 255, 255, 0.05),
+                inset 0 1px 1px rgba(255, 255, 255, 0.08),
+                0 0 30px rgba(51, 255, 51, 0.6);
+        }
+
+        .cmd-taskbar-icon.icon-dragging {
+            cursor: grabbing;
+            transition: none;
+            box-shadow:
+                2px 2px 6px rgba(0, 0, 0, 0.6),
+                inset 2px 2px 4px rgba(0, 0, 0, 0.5),
+                0 0 25px rgba(51, 255, 51, 0.6);
+        }
+
+        /* "صفحه‌ی" داخلی آیکون شبیه مانیتور کوچیک */
+        .cmd-taskbar-icon .icon-screen {
+            width: 44px;
+            height: 34px;
+            border-radius: 5px;
+            background: radial-gradient(circle at 50% 30%, #0f2b0f 0%, #050805 80%);
+            border: 1px solid #2a5a2a;
+            box-shadow:
+                inset 0 0 6px rgba(51, 255, 51, 0.5),
+                inset 0 2px 3px rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* افکت براق (gloss) بالای آیکون */
+        .cmd-taskbar-icon::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 6px;
+            right: 6px;
+            height: 40%;
+            border-radius: 14px 14px 40% 40% / 14px 14px 60% 60%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0));
+            pointer-events: none;
+        }
+
+        .cmd-taskbar-icon .icon-screen span {
             color: #33ff33;
             font-family: 'Courier New', monospace;
             font-weight: bold;
-            font-size: 20px;
-        }
-
-        .cmd-taskbar-icon:hover {
-            box-shadow: 0 0 25px rgba(51, 255, 51, 0.7);
+            font-size: 15px;
+            text-shadow: 0 0 6px rgba(51, 255, 51, 0.9), 0 0 12px rgba(51, 255, 51, 0.5);
         }
     </style>
 </head>
@@ -94,7 +144,9 @@
 
     <!-- آیکون تسک‌بار برای وقتی که پنجره بسته میشه -->
     <div class="cmd-taskbar-icon" id="taskbarIcon">
-        <span>C:\</span>
+        <div class="icon-screen">
+            <span>&gt;_</span>
+        </div>
     </div>
 
     <script>
@@ -249,18 +301,193 @@
         });
 
         /* ============================
-           بستن پنجره و نمایش آیکون / بازکردن دوباره
+           بستن پنجره و نمایش آیکون (با افت فیزیکی)
         ============================ */
         cmdClose.addEventListener('click', function(e) {
             e.stopPropagation();
             cmdContainer.style.display = 'none';
             taskbarIcon.classList.add('show');
+            dropIcon();
         });
 
+        // بازکردن دوباره‌ی پنجره با دابل‌کلیک روی آیکون
         taskbarIcon.addEventListener('dblclick', function() {
             cmdContainer.style.display = 'block';
             taskbarIcon.classList.remove('show');
             hiddenInput.focus();
+        });
+
+        /* ============================
+           فیزیک آیکون: افتادن با جاذبه + قابلیت گرفتن و پرتاب با موس
+        ============================ */
+        const ICON_SIZE = 68;
+        const GRAVITY = 0.7;
+        const BOUNCE_DAMPING = 0.55;
+        const FRICTION = 0.985;
+        const STOP_VELOCITY = 0.4;
+        const EDGE_MARGIN = 12;
+
+        let iconX = 30;
+        let iconY = -100;
+        let iconVX = 0;
+        let iconVY = 0;
+        let isIconDragging = false;
+        let iconDragOffsetX = 0;
+        let iconDragOffsetY = 0;
+        let lastPointerX = 0;
+        let lastPointerY = 0;
+        let lastPointerTime = 0;
+        let physicsRunning = false;
+
+        function setIconPosition(x, y) {
+            taskbarIcon.style.left = x + 'px';
+            taskbarIcon.style.top = y + 'px';
+        }
+
+        function startIconPhysics() {
+            if (physicsRunning) return;
+            physicsRunning = true;
+            requestAnimationFrame(iconPhysicsLoop);
+        }
+
+        function iconPhysicsLoop() {
+            if (!taskbarIcon.classList.contains('show')) {
+                physicsRunning = false;
+                return;
+            }
+
+            if (!isIconDragging) {
+                iconVY += GRAVITY;
+                iconX += iconVX;
+                iconY += iconVY;
+                iconVX *= FRICTION;
+
+                const floorY = window.innerHeight - ICON_SIZE - EDGE_MARGIN;
+                const ceilingY = EDGE_MARGIN;
+                const leftWall = EDGE_MARGIN;
+                const rightWall = window.innerWidth - ICON_SIZE - EDGE_MARGIN;
+
+                if (iconY > floorY) {
+                    iconY = floorY;
+                    iconVY = -iconVY * BOUNCE_DAMPING;
+                    if (Math.abs(iconVY) < STOP_VELOCITY) iconVY = 0;
+                }
+                if (iconY < ceilingY) {
+                    iconY = ceilingY;
+                    iconVY = -iconVY * BOUNCE_DAMPING;
+                }
+                if (iconX < leftWall) {
+                    iconX = leftWall;
+                    iconVX = -iconVX * BOUNCE_DAMPING;
+                }
+                if (iconX > rightWall) {
+                    iconX = rightWall;
+                    iconVX = -iconVX * BOUNCE_DAMPING;
+                }
+
+                setIconPosition(iconX, iconY);
+            }
+
+            requestAnimationFrame(iconPhysicsLoop);
+        }
+
+        // هر بار که پنجره بسته میشه، آیکون از بالای صفحه با جاذبه سقوط می‌کنه
+        function dropIcon() {
+            iconX = 30;
+            iconY = -100;
+            iconVX = 0;
+            iconVY = 0;
+            setIconPosition(iconX, iconY);
+            startIconPhysics();
+        }
+
+        // گرفتن آیکون با موس
+        taskbarIcon.addEventListener('mousedown', function(e) {
+            isIconDragging = true;
+            iconVX = 0;
+            iconVY = 0;
+            taskbarIcon.classList.add('icon-dragging');
+
+            const rect = taskbarIcon.getBoundingClientRect();
+            iconDragOffsetX = e.clientX - rect.left;
+            iconDragOffsetY = e.clientY - rect.top;
+            lastPointerX = e.clientX;
+            lastPointerY = e.clientY;
+            lastPointerTime = performance.now();
+
+            e.preventDefault();
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (!isIconDragging) return;
+
+            const now = performance.now();
+            const dt = Math.max(now - lastPointerTime, 1);
+
+            iconX = e.clientX - iconDragOffsetX;
+            iconY = e.clientY - iconDragOffsetY;
+
+            // محاسبه سرعت لحظه‌ای موس، برای اینکه هنگام رها کردن مثل پرتاب واقعی حرکت کنه
+            iconVX = (e.clientX - lastPointerX) / dt * 16;
+            iconVY = (e.clientY - lastPointerY) / dt * 16;
+
+            setIconPosition(iconX, iconY);
+
+            lastPointerX = e.clientX;
+            lastPointerY = e.clientY;
+            lastPointerTime = now;
+        });
+
+        document.addEventListener('mouseup', function() {
+            if (isIconDragging) {
+                isIconDragging = false;
+                taskbarIcon.classList.remove('icon-dragging');
+                startIconPhysics(); // جاذبه دوباره روی آیکون اثر می‌کنه تا بیفته پایین
+            }
+        });
+
+        // پشتیبانی از لمس (موبایل / تبلت)
+        taskbarIcon.addEventListener('touchstart', function(e) {
+            isIconDragging = true;
+            iconVX = 0;
+            iconVY = 0;
+            taskbarIcon.classList.add('icon-dragging');
+
+            const touch = e.touches[0];
+            const rect = taskbarIcon.getBoundingClientRect();
+            iconDragOffsetX = touch.clientX - rect.left;
+            iconDragOffsetY = touch.clientY - rect.top;
+            lastPointerX = touch.clientX;
+            lastPointerY = touch.clientY;
+            lastPointerTime = performance.now();
+        });
+
+        document.addEventListener('touchmove', function(e) {
+            if (!isIconDragging) return;
+            const touch = e.touches[0];
+
+            const now = performance.now();
+            const dt = Math.max(now - lastPointerTime, 1);
+
+            iconX = touch.clientX - iconDragOffsetX;
+            iconY = touch.clientY - iconDragOffsetY;
+
+            iconVX = (touch.clientX - lastPointerX) / dt * 16;
+            iconVY = (touch.clientY - lastPointerY) / dt * 16;
+
+            setIconPosition(iconX, iconY);
+
+            lastPointerX = touch.clientX;
+            lastPointerY = touch.clientY;
+            lastPointerTime = now;
+        });
+
+        document.addEventListener('touchend', function() {
+            if (isIconDragging) {
+                isIconDragging = false;
+                taskbarIcon.classList.remove('icon-dragging');
+                startIconPhysics();
+            }
         });
     </script>
 </body>
