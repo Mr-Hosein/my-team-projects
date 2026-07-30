@@ -17,9 +17,13 @@
     <!-- افکت خطوط ریز پس‌زمینه (Scanline) -->
     <div class="scanline-overlay" aria-hidden="true"></div>
 
+    <!-- نور دنبال‌کننده‌ی موس (افکت جدید) -->
+    <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
     <!-- هدر: نوار تب‌های ادیتور کد -->
     <header class="ide-topbar">
-        <nav class="ide-tabs">
+        <nav class="ide-tabs" id="ideTabs">
+            <span class="tab-indicator" id="tabIndicator"></span>
             <a href="#home" class="ide-tab active" data-target="home">
                 <span class="tab-dot"></span>home.html
             </a>
@@ -76,7 +80,7 @@
         <section id="projects" class="projects">
             <div class="container">
                 <p class="section-eyebrow" dir="ltr">// selected work</p>
-                <h2 class="section-title">نمونه‌کارها</h2>
+                <h2 class="section-title glitch">نمونه‌کارها</h2>
                 <p class="section-desc">چند پروژه از کارهایی که تا امروز ساختم.</p>
 
                 <div class="projects-grid">
@@ -87,10 +91,10 @@
                             <span class="dot dot-green"></span>
                             <span class="card-filename" dir="ltr">shop.project</span>
                         </div>
-                        <div class="card-preview" aria-hidden="true">
-                            <pre dir="ltr"><code><span class="c-key">const</span> <span class="c-var">cart</span> = <span class="c-key">new</span> <span class="c-fn">Store</span>();
-<span class="c-var">cart</span>.<span class="c-fn">checkout</span>(<span class="c-str">"online"</span>);</code></pre>
-                        </div>
+                        <a class="card-preview video-preview" href="https://www.youtube.com/watch?v=VIDEO_ID_1" target="_blank" rel="noopener noreferrer" aria-label="مشاهده‌ی ویدیوی پروژه‌ی وب‌سایت فروشگاهی در یوتیوب">
+                            <img src="https://img.youtube.com/vi/VIDEO_ID_1/hqdefault.jpg" alt="پیش‌نمایش ویدیوی وب‌سایت فروشگاهی" loading="lazy">
+                            <span class="play-btn" aria-hidden="true">▶</span>
+                        </a>
                         <div class="card-body">
                             <h3>وب‌سایت فروشگاهی</h3>
                             <p>یک فروشگاه آنلاین کامل با سبد خرید و پرداخت آنلاین.</p>
@@ -117,10 +121,10 @@
                             <span class="dot dot-green"></span>
                             <span class="card-filename" dir="ltr">tasks.project</span>
                         </div>
-                        <div class="card-preview" aria-hidden="true">
-                            <pre dir="ltr"><code><span class="c-var">tasks</span>.<span class="c-fn">filter</span>(t <span class="c-key">=></span> !t.<span class="c-var">done</span>)
-     .<span class="c-fn">forEach</span>(<span class="c-fn">remind</span>);</code></pre>
-                        </div>
+                        <a class="card-preview video-preview" href="https://www.youtube.com/watch?v=VIDEO_ID_2" target="_blank" rel="noopener noreferrer" aria-label="مشاهده‌ی ویدیوی پروژه‌ی اپلیکیشن مدیریت وظایف در یوتیوب">
+                            <img src="https://img.youtube.com/vi/VIDEO_ID_2/hqdefault.jpg" alt="پیش‌نمایش ویدیوی اپلیکیشن مدیریت وظایف" loading="lazy">
+                            <span class="play-btn" aria-hidden="true">▶</span>
+                        </a>
                         <div class="card-body">
                             <h3>اپلیکیشن مدیریت وظایف</h3>
                             <p>اپلیکیشنی برای سازمان‌دهی و پیگیری کارهای روزانه.</p>
@@ -147,11 +151,10 @@
                             <span class="dot dot-green"></span>
                             <span class="card-filename" dir="ltr">blog.project</span>
                         </div>
-                        <div class="card-preview" aria-hidden="true">
-                            <pre dir="ltr"><code><span class="c-key">export</span> <span class="c-key">default</span> <span class="c-fn">Blog</span>({
-  <span class="c-var">posts</span>: <span class="c-fn">fetchPosts</span>()
-});</code></pre>
-                        </div>
+                        <a class="card-preview video-preview" href="https://www.youtube.com/watch?v=VIDEO_ID_3" target="_blank" rel="noopener noreferrer" aria-label="مشاهده‌ی ویدیوی پروژه‌ی وبلاگ شخصی در یوتیوب">
+                            <img src="https://img.youtube.com/vi/VIDEO_ID_3/hqdefault.jpg" alt="پیش‌نمایش ویدیوی وبلاگ شخصی" loading="lazy">
+                            <span class="play-btn" aria-hidden="true">▶</span>
+                        </a>
                         <div class="card-body">
                             <h3>وبلاگ شخصی</h3>
                             <p>سیستم مدیریت محتوایی ساده، سریع، و بدون شلوغی.</p>
@@ -188,10 +191,10 @@
                         <div class="terminal-body about-json" dir="ltr">
 <pre><code>{
   <span class="c-key">"name"</span>: <span class="c-str">"Hossein Ali Bakhshi"</span>,
-  <span class="c-key">"age"</span>: <span class="c-num">26</span>,
+  <span class="c-key">"age"</span>: <span class="c-num counter" data-target="26">0</span>,
   <span class="c-key">"role"</span>: <span class="c-str">"backend Developer and AI Developer"</span>,
   <span class="c-key">"experience"</span>: <span class="c-str">"7+ years"</span>,
-  <span class="c-key">"projects_completed"</span>: <span class="c-num">30+</span>,
+  <span class="c-key">"projects_completed"</span>: <span class="c-num counter" data-target="30" data-suffix="+">0</span>,
   <span class="c-key">"status"</span>: <span class="c-str">"available_for_work"</span>
 }</code></pre>
                         </div>
@@ -200,7 +203,7 @@
 
                 <div class="about-text reveal">
                     <p class="section-eyebrow" dir="ltr">// about me</p>
-                    <h2 class="section-title">درباره‌ی من</h2>
+                    <h2 class="section-title glitch">درباره‌ی من</h2>
                     <p>سلام! من حسین‌ام، 26 ساله، و کارم برنامه نویسی و توسعه‌ی وب و همچنین برنامه نویسی و توسعه ی مدل های هوش مصنوعی هستش.</p>
                     <p>از چند سال پیش شروع کردم به برنامه‌نویسی، و تا امروز حداقل 30 تا پروژه ی حرفه ای انجام دادم و مدیر یک گروه بزرگ برنامه نویسی و فریلنسری هستم.</p>
                     <p>یه وب‌سایت خوب هم باید چشم‌نواز باشه، هم روون کار کنه ما همه ی اینارو برای شما انجام میدیم</p>
@@ -227,7 +230,7 @@
         <section id="contact" class="contact">
             <div class="container">
                 <p class="section-eyebrow" dir="ltr">// get in touch</p>
-                <h2 class="section-title">تماس با من</h2>
+                <h2 class="section-title glitch">تماس با من</h2>
                 <p class="section-desc">خوشحال میشم نظر یا پیشنهادت رو بشنوم.</p>
 
                 <div class="contact-grid">
@@ -362,10 +365,22 @@
         ============================ */
         const sections = document.querySelectorAll('main > section[id]');
         const tabs = document.querySelectorAll('.ide-tab');
+        const ideTabsEl = document.getElementById('ideTabs');
+        const tabIndicator = document.getElementById('tabIndicator');
+
+        function moveIndicatorTo(tabEl) {
+            if (!tabEl || !tabIndicator || !ideTabsEl) return;
+            const tabsRect = ideTabsEl.getBoundingClientRect();
+            const rect = tabEl.getBoundingClientRect();
+            tabIndicator.style.width = rect.width + 'px';
+            tabIndicator.style.transform = 'translateX(' + (rect.left - tabsRect.left) + 'px)';
+        }
 
         function setActiveTab(id) {
             tabs.forEach(tab => {
-                tab.classList.toggle('active', tab.dataset.target === id);
+                const isActive = tab.dataset.target === id;
+                tab.classList.toggle('active', isActive);
+                if (isActive) moveIndicatorTo(tab);
             });
         }
 
@@ -379,6 +394,150 @@
             }, { threshold: 0.5 });
 
             sections.forEach(sec => navObserver.observe(sec));
+        }
+
+        window.addEventListener('resize', () => {
+            const activeTab = document.querySelector('.ide-tab.active');
+            moveIndicatorTo(activeTab);
+        });
+
+        window.addEventListener('load', () => {
+            const activeTab = document.querySelector('.ide-tab.active');
+            moveIndicatorTo(activeTab);
+        });
+
+        /* ============================
+           افکت گلیچ روی تیتر بخش‌ها (یک‌بار، هنگام ورود به دید)
+        ============================ */
+        const glitchTitles = document.querySelectorAll('.section-title.glitch');
+        glitchTitles.forEach(title => {
+            title.dataset.text = title.textContent;
+        });
+
+        if ('IntersectionObserver' in window && !reduceMotion) {
+            const glitchObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('glitch-active');
+                        entry.target.addEventListener('animationend', () => {
+                            entry.target.classList.remove('glitch-active');
+                        }, { once: true });
+                        glitchObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.6 });
+
+            glitchTitles.forEach(title => glitchObserver.observe(title));
+        }
+
+        /* ============================
+           شمارنده‌ی اعداد (سن، تعداد پروژه‌ها) هنگام ورود به دید
+        ============================ */
+        const counters = document.querySelectorAll('.counter');
+
+        function animateCounter(el) {
+            const target = parseInt(el.dataset.target, 10) || 0;
+            const suffix = el.dataset.suffix || '';
+            const duration = 1200;
+            const startTime = performance.now();
+
+            function step(now) {
+                const progress = Math.min((now - startTime) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = Math.round(eased * target);
+                el.textContent = current + suffix;
+                if (progress < 1) requestAnimationFrame(step);
+            }
+
+            if (reduceMotion) {
+                el.textContent = target + suffix;
+            } else {
+                requestAnimationFrame(step);
+            }
+        }
+
+        if ('IntersectionObserver' in window) {
+            const counterObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounter(entry.target);
+                        counterObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            counters.forEach(c => counterObserver.observe(c));
+        } else {
+            counters.forEach(animateCounter);
+        }
+
+        /* ============================
+           نور دنبال‌کننده‌ی موس (اتمسفر ترمینال)
+        ============================ */
+        const cursorGlow = document.getElementById('cursorGlow');
+        const isFinePointer = window.matchMedia('(pointer: fine)').matches;
+
+        if (cursorGlow && isFinePointer && !reduceMotion) {
+            let glowX = window.innerWidth / 2;
+            let glowY = window.innerHeight / 2;
+            let targetX = glowX;
+            let targetY = glowY;
+
+            window.addEventListener('mousemove', (e) => {
+                targetX = e.clientX;
+                targetY = e.clientY;
+            });
+
+            function animateGlow() {
+                glowX += (targetX - glowX) * 0.12;
+                glowY += (targetY - glowY) * 0.12;
+                cursorGlow.style.transform = 'translate(' + glowX + 'px,' + glowY + 'px)';
+                requestAnimationFrame(animateGlow);
+            }
+            animateGlow();
+        } else if (cursorGlow) {
+            cursorGlow.style.display = 'none';
+        }
+
+        /* ============================
+           دکمه‌های مغناطیسی (Hero + دکمه‌های اصلی)
+        ============================ */
+        const magneticEls = document.querySelectorAll('.btn-primary, .btn-ghost');
+
+        if (isFinePointer && !reduceMotion) {
+            magneticEls.forEach(el => {
+                el.addEventListener('mousemove', (e) => {
+                    const rect = el.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    el.style.transform = 'translate(' + (x * 0.25) + 'px,' + (y * 0.35) + 'px)';
+                });
+                el.addEventListener('mouseleave', () => {
+                    el.style.transform = 'translate(0,0)';
+                });
+            });
+        }
+
+        /* ============================
+           چرخش سه‌بعدی کارت‌های پروژه با موس
+        ============================ */
+        const tiltCards = document.querySelectorAll('.project-card');
+
+        if (isFinePointer && !reduceMotion) {
+            tiltCards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const px = (e.clientX - rect.left) / rect.width - 0.5;
+                    const py = (e.clientY - rect.top) / rect.height - 0.5;
+                    const rotateX = (py * -8).toFixed(2);
+                    const rotateY = (px * 8).toFixed(2);
+                    card.style.transform =
+                        'perspective(800px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-6px)';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = '';
+                });
+            });
         }
     </script>
 </body>
