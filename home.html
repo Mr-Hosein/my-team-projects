@@ -27,11 +27,23 @@
             <a href="#home" class="ide-tab active" data-target="home">
                 <span class="tab-dot"></span>home.html
             </a>
+            <a href="#stats" class="ide-tab" data-target="stats">
+                <span class="tab-dot"></span>stats.sh
+            </a>
             <a href="#projects" class="ide-tab" data-target="projects">
                 <span class="tab-dot"></span>projects.js
             </a>
+            <a href="#workflow" class="ide-tab" data-target="workflow">
+                <span class="tab-dot"></span>workflow.sh
+            </a>
             <a href="#about" class="ide-tab" data-target="about">
                 <span class="tab-dot"></span>about.json
+            </a>
+            <a href="#career" class="ide-tab" data-target="career">
+                <span class="tab-dot"></span>career.log
+            </a>
+            <a href="#playground" class="ide-tab" data-target="playground">
+                <span class="tab-dot"></span>playground.sh
             </a>
             <a href="#contact" class="ide-tab" data-target="contact">
                 <span class="tab-dot"></span>contact.sh
@@ -75,6 +87,51 @@
                 </div>
             </div>
         </section>
+
+        <!-- بخش آمار زنده‌ی گیت‌هاب -->
+        <section id="stats" class="stats">
+            <div class="container">
+                <div class="terminal-window stats-terminal">
+                    <div class="terminal-titlebar">
+                        <span class="dot dot-red"></span>
+                        <span class="dot dot-yellow"></span>
+                        <span class="dot dot-green"></span>
+                        <span class="terminal-title" dir="ltr">github --stats</span>
+                    </div>
+                    <div class="terminal-body stats-body" dir="ltr" id="statsBody">
+                        <div class="term-line prompt"><span class="term-prompt-sign">$ </span><span class="term-text">curl api.github.com/users/Mr-Hosein</span></div>
+                        <div class="stats-grid" id="statsGrid">
+                            <div class="stat-box">
+                                <span class="stat-number" id="statRepos" data-target="0">0</span>
+                                <span class="stat-label">public repos</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-number" id="statFollowers" data-target="0">0</span>
+                                <span class="stat-label">followers</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-number" id="statStars" data-target="0">0</span>
+                                <span class="stat-label">stars earned</span>
+                            </div>
+                        </div>
+                        <div class="term-line output stats-fallback" id="statsFallback" hidden>
+                            <span class="term-output-sign">> </span>
+                            <span class="term-text">اتصال به گیت‌هاب برقرار نشد؛ مستقیم ببین: <a href="https://github.com/Mr-Hosein" target="_blank" rel="noopener noreferrer">github.com/Mr-Hosein</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- نوار متحرک تکنولوژی‌ها -->
+        <div class="tech-marquee" aria-hidden="true">
+            <div class="tech-track">
+                <span>Python</span><span>JavaScript</span><span>HTML/CSS</span><span>PHP</span><span>C#</span>
+                <span>Git/Gitlab</span><span>Linux</span><span>AI</span><span>MySQL</span><span>Bootstrap</span>
+                <span>Python</span><span>JavaScript</span><span>HTML/CSS</span><span>PHP</span><span>C#</span>
+                <span>Git/Gitlab</span><span>Linux</span><span>AI</span><span>MySQL</span><span>Bootstrap</span>
+            </div>
+        </div>
 
         <!-- بخش پروژه‌ها -->
         <section id="projects" class="projects">
@@ -177,6 +234,38 @@
             </div>
         </section>
 
+        <!-- بخش روند کاری -->
+        <section id="workflow" class="workflow">
+            <div class="container">
+                <p class="section-eyebrow" dir="ltr">// how I work</p>
+                <h2 class="section-title glitch">./workflow.sh</h2>
+                <p class="section-desc">از ایده تا تحویل، هر پروژه همین ۴ قدم رو طی می‌کنه.</p>
+
+                <div class="workflow-grid">
+                    <div class="workflow-step reveal">
+                        <span class="step-number" dir="ltr">01</span>
+                        <h3>شناخت نیاز</h3>
+                        <p>هدف، مخاطب، و محدودیت‌های پروژه رو دقیق می‌فهمم؛ قبل از هر خط کد.</p>
+                    </div>
+                    <div class="workflow-step reveal">
+                        <span class="step-number" dir="ltr">02</span>
+                        <h3>طراحی رابط</h3>
+                        <p>ساختار و ظاهر رو طراحی می‌کنم؛ چیزی که هم قشنگ باشه، هم قابل فهم.</p>
+                    </div>
+                    <div class="workflow-step reveal">
+                        <span class="step-number" dir="ltr">03</span>
+                        <h3>توسعه</h3>
+                        <p>کدنویسی تمیز، قابل نگه‌داری، و تست‌شده؛ گام‌به‌گام و شفاف با کارفرما.</p>
+                    </div>
+                    <div class="workflow-step reveal">
+                        <span class="step-number" dir="ltr">04</span>
+                        <h3>تحویل و پشتیبانی</h3>
+                        <p>راه‌اندازی نهایی، آموزش استفاده، و پشتیبانی بعد از تحویل پروژه.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- بخش درباره‌ی من -->
         <section id="about" class="about">
             <div class="container about-grid">
@@ -221,6 +310,78 @@
                             <li>MySQL</li>
                             <li>Bootstrap</li>
                         </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- بخش مسیر حرفه‌ای -->
+        <section id="career" class="career">
+            <div class="container">
+                <p class="section-eyebrow" dir="ltr">// career.log</p>
+                <h2 class="section-title glitch">مسیر حرفه‌ای</h2>
+                <p class="section-desc">خلاصه‌ای از مسیری که تا اینجا اومدم.</p>
+
+                <div class="timeline">
+                    <div class="timeline-item reveal">
+                        <span class="timeline-dot"></span>
+                        <div class="timeline-content">
+                            <h3>شروع برنامه‌نویسی</h3>
+                            <p>یادگیری پایه‌های وب و اولین خط‌های کد.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item reveal">
+                        <span class="timeline-dot"></span>
+                        <div class="timeline-content">
+                            <h3>اولین پروژه‌ی فریلنسری</h3>
+                            <p>اولین همکاری واقعی با یه کارفرما، و اولین تجربه‌ی تحویل پروژه.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item reveal">
+                        <span class="timeline-dot"></span>
+                        <div class="timeline-content">
+                            <h3>ورود به هوش مصنوعی</h3>
+                            <p>گسترش مهارت‌ها به سمت توسعه‌ی ابزارهای مبتنی بر هوش مصنوعی.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item reveal">
+                        <span class="timeline-dot"></span>
+                        <div class="timeline-content">
+                            <h3>تشکیل تیم توسعه</h3>
+                            <p>مدیریت یک گروه فریلنسری برای پروژه‌های بزرگ‌تر.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item reveal">
+                        <span class="timeline-dot"></span>
+                        <div class="timeline-content">
+                            <h3>عبور از ۳۰ پروژه</h3>
+                            <p>امروز، با بیش از ۳۰ پروژه‌ی موفق تحویل‌شده.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- بخش ترمینال تعاملی -->
+        <section id="playground" class="playground">
+            <canvas class="matrix-canvas" id="matrixCanvas" aria-hidden="true"></canvas>
+            <div class="container">
+                <p class="section-eyebrow" dir="ltr">// try it yourself</p>
+                <h2 class="section-title glitch">امتحانش کن</h2>
+                <p class="section-desc">یه دستور بنویس و اینتر بزن. برای شروع <code dir="ltr">help</code> رو امتحان کن.</p>
+
+                <div class="terminal-window playground-terminal">
+                    <div class="terminal-titlebar">
+                        <span class="dot dot-red"></span>
+                        <span class="dot dot-yellow"></span>
+                        <span class="dot dot-green"></span>
+                        <span class="terminal-title" dir="ltr">guest@portfolio:~</span>
+                    </div>
+                    <div class="terminal-body playground-body" id="playgroundOutput" dir="ltr"></div>
+                    <div class="playground-inputline" dir="ltr">
+                        <span class="term-prompt-sign">$</span>
+                        <input type="text" id="playgroundInput" class="playground-input" autocomplete="off" spellcheck="false" aria-label="ترمینال تعاملی - اینجا دستور بنویس">
+                        <span class="term-cursor">_</span>
                     </div>
                 </div>
             </div>
@@ -538,6 +699,228 @@
                     card.style.transform = '';
                 });
             });
+        }
+
+        /* ============================
+           آمار زنده‌ی گیت‌هاب (GitHub API)
+        ============================ */
+        let statsDataReady = false;
+        let statsVisible = false;
+
+        function maybeAnimateStats() {
+            if (!statsDataReady || !statsVisible) return;
+            ['statRepos', 'statFollowers', 'statStars'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el && !el.dataset.animated) {
+                    el.dataset.animated = 'true';
+                    animateCounter(el);
+                }
+            });
+        }
+
+        const statsSection = document.getElementById('stats');
+        if (statsSection && 'IntersectionObserver' in window) {
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        statsVisible = true;
+                        maybeAnimateStats();
+                        statsObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+            statsObserver.observe(statsSection);
+        } else {
+            statsVisible = true;
+        }
+
+        function setStat(id, value) {
+            const el = document.getElementById(id);
+            if (el) el.dataset.target = value;
+        }
+
+        async function loadGithubStats() {
+            try {
+                const userRes = await fetch('https://api.github.com/users/Mr-Hosein');
+                if (!userRes.ok) throw new Error('user fetch failed');
+                const user = await userRes.json();
+
+                let totalStars = 0;
+                try {
+                    const reposRes = await fetch('https://api.github.com/users/Mr-Hosein/repos?per_page=100');
+                    if (reposRes.ok) {
+                        const repos = await reposRes.json();
+                        if (Array.isArray(repos)) {
+                            totalStars = repos.reduce((sum, r) => sum + (r.stargazers_count || 0), 0);
+                        }
+                    }
+                } catch (e) { /* اگه استارها نگرفتیم، مشکلی نیست */ }
+
+                setStat('statRepos', user.public_repos || 0);
+                setStat('statFollowers', user.followers || 0);
+                setStat('statStars', totalStars);
+                statsDataReady = true;
+                maybeAnimateStats();
+            } catch (err) {
+                const fallback = document.getElementById('statsFallback');
+                const grid = document.getElementById('statsGrid');
+                if (fallback) fallback.hidden = false;
+                if (grid) grid.style.display = 'none';
+            }
+        }
+
+        loadGithubStats();
+
+        /* ============================
+           افکت باران ماتریکس (پس‌زمینه‌ی بخش Playground)
+        ============================ */
+        const matrixCanvas = document.getElementById('matrixCanvas');
+        let playgroundVisible = false;
+
+        if (matrixCanvas && !reduceMotion) {
+            const ctx = matrixCanvas.getContext('2d');
+            let columns = 0;
+            let drops = [];
+            const fontSize = 18;
+            const matrixChars = 'アイウエオカキクケコ01ABCDEFXYZ$#@%&';
+
+            function resizeMatrix() {
+                matrixCanvas.width = matrixCanvas.offsetWidth;
+                matrixCanvas.height = matrixCanvas.offsetHeight;
+                columns = Math.max(1, Math.floor(matrixCanvas.width / fontSize));
+                drops = new Array(columns).fill(1);
+            }
+            resizeMatrix();
+            window.addEventListener('resize', resizeMatrix);
+
+            function drawMatrix() {
+                if (playgroundVisible) {
+                    ctx.fillStyle = 'rgba(7, 9, 10, 0.08)';
+                    ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+                    ctx.fillStyle = 'rgba(61, 220, 115, 0.55)';
+                    ctx.font = fontSize + 'px monospace';
+
+                    for (let i = 0; i < drops.length; i++) {
+                        const char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+                        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+                        if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+                            drops[i] = 0;
+                        }
+                        drops[i]++;
+                    }
+                }
+                requestAnimationFrame(drawMatrix);
+            }
+            drawMatrix();
+
+            const playgroundSection = document.getElementById('playground');
+            if (playgroundSection && 'IntersectionObserver' in window) {
+                new IntersectionObserver((entries) => {
+                    entries.forEach(entry => { playgroundVisible = entry.isIntersecting; });
+                }, { threshold: 0.05 }).observe(playgroundSection);
+            } else {
+                playgroundVisible = true;
+            }
+        } else if (matrixCanvas) {
+            matrixCanvas.style.display = 'none';
+        }
+
+        /* ============================
+           ترمینال تعاملی (Playground)
+        ============================ */
+        const pgOutput = document.getElementById('playgroundOutput');
+        const pgInput = document.getElementById('playgroundInput');
+
+        function pgPrint(text, cls) {
+            const div = document.createElement('div');
+            div.className = 'term-line ' + (cls || 'output');
+            div.dir = 'auto';
+            div.textContent = text;
+            pgOutput.appendChild(div);
+            pgOutput.scrollTop = pgOutput.scrollHeight;
+        }
+
+        function pgPrintPrompt(cmd) {
+            const div = document.createElement('div');
+            div.className = 'term-line prompt';
+            const sign = document.createElement('span');
+            sign.className = 'term-prompt-sign';
+            sign.textContent = '$ ';
+            const text = document.createElement('span');
+            text.className = 'term-text';
+            text.textContent = cmd;
+            div.appendChild(sign);
+            div.appendChild(text);
+            pgOutput.appendChild(div);
+            pgOutput.scrollTop = pgOutput.scrollHeight;
+        }
+
+        const pgCommands = {
+            whoami: 'guest — یه بازدیدکننده‌ی کنجکاو 🙂',
+            skills: 'Python, JavaScript, HTML/CSS, PHP, C#, Git, Linux, AI, MySQL, Bootstrap',
+            projects: 'برای دیدن نمونه‌کارها بنویس: open projects',
+            contact: 'ایمیل: mrhosein.ab@gmail.com',
+            github: 'github.com/Mr-Hosein',
+            joke: 'یه باگ وارد بار شد... و کل سیستم کرش کرد 😄'
+        };
+
+        function pgHelpText() {
+            return 'دستورهای موجود: help, whoami, skills, projects, contact, github, joke, open <section>, clear';
+        }
+
+        function runPgCommand(raw) {
+            const cmd = raw.trim();
+            if (!cmd) return;
+            pgPrintPrompt(cmd);
+
+            const lower = cmd.toLowerCase();
+
+            if (lower === 'clear') {
+                pgOutput.innerHTML = '';
+                return;
+            }
+            if (lower === 'help') {
+                pgPrint(pgHelpText());
+                return;
+            }
+            if (lower === 'sudo hire-me' || lower === 'sudo hire me') {
+                pgPrint('✅ درخواست ثبت شد؛ برو بخش contact.sh و پیام بده!');
+                return;
+            }
+            if (lower.startsWith('open ')) {
+                const target = lower.replace('open', '').trim();
+                const map = { home: 'home', projects: 'projects', about: 'about', contact: 'contact', career: 'career', stats: 'stats', workflow: 'workflow' };
+                const dest = map[target];
+                if (dest) {
+                    const el = document.getElementById(dest);
+                    if (el) el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+                    pgPrint('در حال رفتن به ' + target + ' ...');
+                } else {
+                    pgPrint('bash: open: بخش «' + target + '» پیدا نشد');
+                }
+                return;
+            }
+
+            if (Object.prototype.hasOwnProperty.call(pgCommands, lower)) {
+                pgPrint(pgCommands[lower]);
+            } else {
+                pgPrint('command not found: ' + cmd + ' — برای راهنما بنویس help');
+            }
+        }
+
+        if (pgInput && pgOutput) {
+            pgPrint('به ترمینال خوش اومدی! برای شروع بنویس: help');
+            pgInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    runPgCommand(pgInput.value);
+                    pgInput.value = '';
+                }
+            });
+
+            const playgroundTerminalEl = document.querySelector('.playground-terminal');
+            if (playgroundTerminalEl) {
+                playgroundTerminalEl.addEventListener('click', () => pgInput.focus());
+            }
         }
     </script>
 </body>
