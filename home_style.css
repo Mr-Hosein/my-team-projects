@@ -666,3 +666,167 @@ section {
     .projects, .about, .contact { padding: 60px 0; }
     .ide-tab { padding: 0 12px; font-size: 11.5px; }
 }
+
+/* ========================================================
+   افزوده‌های جدید: انیمیشن‌های بیشتر
+   (بدون حذف هیچ‌کدوم از استایل‌های قبلی)
+   ======================================================== */
+
+/* نور دنبال‌کننده‌ی موس */
+.cursor-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 480px;
+    height: 480px;
+    margin-top: -240px;
+    margin-left: -240px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent-glow) 0%, rgba(61, 220, 115, 0.06) 45%, transparent 70%);
+    pointer-events: none;
+    z-index: 2;
+    mix-blend-mode: screen;
+    will-change: transform;
+}
+
+/* ایندیکیتور متحرک زیر تب‌های فعال */
+.ide-tabs {
+    position: relative;
+}
+
+.tab-indicator {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 2px;
+    width: 0;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent-glow);
+    transition: transform 0.3s ease, width 0.3s ease;
+    pointer-events: none;
+}
+
+/* دکمه‌های مغناطیسی */
+.btn-primary,
+.btn-ghost {
+    will-change: transform;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+/* کارت‌های پروژه با چرخش سه‌بعدی */
+.project-card {
+    will-change: transform;
+    transform-style: preserve-3d;
+}
+
+/* پیش‌نمایش ویدیوی یوتیوب روی کارت پروژه‌ها */
+.video-preview {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #0a0e0a;
+}
+
+.video-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease, filter 0.4s ease;
+    filter: saturate(0.85) brightness(0.85);
+}
+
+.video-preview:hover img {
+    transform: scale(1.08);
+    filter: saturate(1) brightness(1);
+}
+
+.play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 54px;
+    height: 54px;
+    transform: translate(-50%, -50%);
+    background: rgba(10, 14, 10, 0.75);
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    padding-right: 4px;
+    box-shadow: 0 0 0 0 var(--accent-glow);
+    animation: playPulse 2.4s ease-out infinite;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.video-preview:hover .play-btn {
+    transform: translate(-50%, -50%) scale(1.12);
+    background: var(--accent);
+    color: #04140a;
+}
+
+@keyframes playPulse {
+    0% { box-shadow: 0 0 0 0 var(--accent-glow); }
+    70% { box-shadow: 0 0 0 16px rgba(61, 220, 115, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(61, 220, 115, 0); }
+}
+
+/* افکت گلیچ روی تیتر بخش‌ها، فقط لحظه‌ی ورود به دید */
+.section-title.glitch {
+    position: relative;
+}
+
+.section-title.glitch.glitch-active::before,
+.section-title.glitch.glitch-active::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+}
+
+.section-title.glitch.glitch-active::before {
+    color: var(--blue);
+    clip-path: inset(0 0 55% 0);
+    animation: glitchTop 0.45s steps(3) 1;
+}
+
+.section-title.glitch.glitch-active::after {
+    color: var(--red);
+    clip-path: inset(55% 0 0 0);
+    animation: glitchBottom 0.45s steps(3) 1;
+}
+
+@keyframes glitchTop {
+    0%   { transform: translate(3px, -2px); opacity: 1; }
+    50%  { transform: translate(-3px, 1px); opacity: 0.8; }
+    100% { transform: translate(0, 0); opacity: 0; }
+}
+
+@keyframes glitchBottom {
+    0%   { transform: translate(-3px, 2px); opacity: 1; }
+    50%  { transform: translate(3px, -1px); opacity: 0.8; }
+    100% { transform: translate(0, 0); opacity: 0; }
+}
+
+/* ملایم کردن ورود ترمینال هیرو (شناور بودن ملایم) */
+@keyframes floatSoft {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.hero-terminal {
+    animation: floatSoft 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-terminal { animation: none; }
+    .cursor-glow { display: none; }
+    .play-btn { animation: none; }
+}
