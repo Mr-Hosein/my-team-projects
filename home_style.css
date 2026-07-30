@@ -1,223 +1,544 @@
-/* تنظیمات کلی - این قسمت برای همه صفحات سایت است */
+/* ========================================================
+   دیزاین سیستم: پورتفولیوی «حسین علی بخشی»
+   مفهوم: ادامه‌ی هویت بصری ترمینال از صفحه‌ی ورودی —
+   کل سایت مثل یه محیط توسعه (IDE) طراحی شده.
+   ======================================================== */
+
+:root {
+    --bg: #07090a;
+    --bg-alt: #0c1210;
+    --surface: #10160f;
+    --surface-2: #141c15;
+    --border: #1f2b1f;
+    --border-bright: #2c4a2c;
+
+    --text: #dcead8;
+    --text-dim: #8ea08b;
+    --text-faint: #5c6b5a;
+
+    --accent: #3ddc73;
+    --accent-soft: rgba(61, 220, 115, 0.14);
+    --accent-glow: rgba(61, 220, 115, 0.35);
+    --amber: #ffb454;
+    --blue: #63b3ff;
+    --red: #ff5f56;
+
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+    --font-body: 'Vazirmatn', Tahoma, sans-serif;
+
+    --radius: 12px;
+    --radius-sm: 8px;
+    --header-height: 56px;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    font-family: 'Vazir', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #f8f9fa;
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    overflow-x: hidden;
 }
 
-/* تنظیمات کانتینر - برای مرکز کردن محتوا */
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
 .container {
-    max-width: 1200px;
+    max-width: 1180px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 24px;
 }
 
-/* استایل منوی بالا (نویگیشن) */
-header {
-    background: #fff;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+a { color: inherit; text-decoration: none; }
+
+::selection {
+    background: var(--accent-glow);
+    color: #04140a;
+}
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* ============================
+   نوار پیشرفت اسکرول
+============================ */
+.scroll-progress {
     position: fixed;
-    width: 100%;
     top: 0;
-    z-index: 1000;
+    right: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--blue));
+    z-index: 3000;
+    transition: width 0.1s ease-out;
 }
 
-nav {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem 20px;
+/* ============================
+   افکت خطوط ریز پس‌زمینه
+============================ */
+.scanline-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        180deg,
+        rgba(61, 220, 115, 0.025) 0px,
+        rgba(61, 220, 115, 0.025) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+}
+
+/* ============================
+   هدر: تب‌های ادیتور
+============================ */
+.ide-topbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 2000;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: var(--header-height);
+    padding: 0 20px;
+    background: var(--bg-alt);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(6px);
 }
 
-.logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #667eea;
-}
-
-.nav-links {
+.ide-tabs {
     display: flex;
-    list-style: none;
-    gap: 2rem;
+    gap: 2px;
+    height: 100%;
+    overflow-x: auto;
 }
 
-.nav-links a {
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    transition: color 0.3s;
+.ide-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 16px;
+    height: 100%;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--text-dim);
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    direction: ltr;
 }
 
-.nav-links a:hover {
-    color: #667eea;
+.ide-tab:hover {
+    color: var(--text);
+    background: var(--surface);
 }
 
-/* بخش خوش‌آمدگویی (Hero) */
-.hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    text-align: center;
-    padding: 150px 20px 100px;
-    margin-top: 60px;
+.ide-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: var(--surface);
 }
 
-.hero-content h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+.tab-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border-bright);
 }
 
-.highlight {
-    color: #ffd700;
+.ide-tab.active .tab-dot {
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent-glow);
 }
 
-.hero-content p {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    opacity: 0.95;
+.ide-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-dim);
+    white-space: nowrap;
 }
 
-.btn {
-    display: inline-block;
-    background: white;
-    color: #667eea;
-    padding: 12px 30px;
-    border-radius: 25px;
-    text-decoration: none;
-    font-weight: bold;
-    margin-top: 1rem;
-    transition: transform 0.3s, box-shadow 0.3s;
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent-glow);
+    animation: pulse 2s ease-in-out infinite;
 }
 
-.btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
 }
 
-/* بخش پروژه‌ها */
-.projects {
-    padding: 80px 0;
-    background: #fff;
+@media (max-width: 640px) {
+    .status-text { display: none; }
 }
 
-.projects h2 {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: #333;
-}
-
-.section-desc {
-    text-align: center;
-    color: #666;
-    margin-bottom: 3rem;
-}
-
-.projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 30px;
-}
-
-.project-card {
-    background: #fff;
-    border-radius: 15px;
+/* ============================
+   پنجره‌ی ترمینال (المان مشترک)
+============================ */
+.terminal-window {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
     overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
 }
 
-.project-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-}
-
-.project-card img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-}
-
-.project-info {
-    padding: 20px;
-}
-
-.project-info h3 {
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.project-info p {
-    color: #666;
-    margin-bottom: 15px;
-    font-size: 0.9rem;
-}
-
-.project-tags {
+.terminal-titlebar {
     display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 15px;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
 }
 
-.project-tags span {
-    background: #f0f0f0;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    color: #667eea;
+.dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    display: inline-block;
 }
 
-.project-link {
-    color: #667eea;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
+.dot-red { background: var(--red); }
+.dot-yellow { background: var(--amber); }
+.dot-green { background: var(--accent); }
+
+.terminal-title {
+    margin-right: auto;
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-faint);
 }
 
-.project-link:hover {
-    color: #764ba2;
+.terminal-body {
+    padding: 22px 20px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    min-height: 220px;
 }
 
-/* بخش درباره من */
-.about {
-    background: #f8f9fa;
-    padding: 80px 0;
+.terminal-body pre {
+    font-family: var(--font-mono);
+    white-space: pre-wrap;
+    line-height: 1.9;
 }
 
-.about h2 {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 2rem;
+/* ============================
+   بخش Hero
+============================ */
+.hero {
+    padding: calc(var(--header-height) + 70px) 0 90px;
 }
 
-.about-content {
+.hero-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.1fr 0.9fr;
     gap: 50px;
     align-items: center;
 }
 
+.hero-terminal .terminal-body {
+    min-height: 200px;
+}
+
+.term-line {
+    margin-bottom: 8px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.term-line.output {
+    color: var(--accent);
+    margin-bottom: 16px;
+}
+
+.term-prompt-sign { color: var(--blue); }
+.term-output-sign { color: var(--accent); }
+.term-text { color: inherit; }
+.term-line.prompt .term-text { color: var(--text); }
+
+.term-cursor {
+    display: inline-block;
+    color: var(--accent);
+    font-weight: bold;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.hero-side {
+    animation: fadeInUp 0.7s ease both;
+    animation-delay: 0.15s;
+}
+
+.eyebrow, .section-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--accent);
+    letter-spacing: 0.03em;
+    margin-bottom: 14px;
+    display: block;
+}
+
+.hero-side h1 {
+    font-size: clamp(1.9rem, 3.2vw, 2.7rem);
+    font-weight: 800;
+    line-height: 1.45;
+    margin-bottom: 18px;
+}
+
+.highlight {
+    color: var(--accent);
+    position: relative;
+}
+
+.hero-desc {
+    color: var(--text-dim);
+    font-size: 1.02rem;
+    max-width: 46ch;
+    margin-bottom: 30px;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.btn-primary, .btn-ghost {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 13px 26px;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: #04140a;
+    border: 1px solid var(--accent);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px var(--accent-glow);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border-bright);
+}
+
+.btn-ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+}
+
+/* ============================
+   بخش‌های عمومی (تیتر و توضیح)
+============================ */
+section {
+    scroll-margin-top: var(--header-height);
+}
+
+.section-title {
+    font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.section-desc {
+    color: var(--text-dim);
+    margin-bottom: 46px;
+    max-width: 60ch;
+}
+
+/* ============================
+   بخش پروژه‌ها
+============================ */
+.projects {
+    padding: 90px 0;
+    background: var(--bg-alt);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 28px;
+}
+
+.project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--accent);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+
+.card-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 14px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+}
+
+.card-filename {
+    margin-right: auto;
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-faint);
+}
+
+.card-preview {
+    background: #0a0e0a;
+    padding: 18px 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.card-preview pre {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.9;
+    color: var(--text-dim);
+    white-space: pre-wrap;
+}
+
+.c-key { color: var(--blue); }
+.c-var { color: var(--text); }
+.c-fn { color: var(--amber); }
+.c-str { color: var(--accent); }
+.c-num { color: var(--amber); }
+
+.card-body {
+    padding: 20px;
+}
+
+.card-body h3 {
+    font-size: 1.08rem;
+    margin-bottom: 8px;
+}
+
+.card-body p {
+    color: var(--text-dim);
+    font-size: 0.92rem;
+    margin-bottom: 16px;
+}
+
+.tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.tags span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border: 1px solid rgba(61, 220, 115, 0.25);
+}
+
+.card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--accent);
+    transition: gap 0.2s ease;
+}
+
+.card-link:hover { gap: 10px; }
+.arrow { transition: transform 0.2s ease; }
+
+/* ============================
+   بخش درباره‌ی من
+============================ */
+.about {
+    padding: 90px 0;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.about-json .c-key { color: var(--amber); }
+.about-json .c-str { color: var(--accent); }
+.about-json .c-num { color: var(--blue); }
+
 .about-text p {
-    margin-bottom: 1rem;
-    text-align: justify;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+    max-width: 58ch;
 }
 
 .skills {
-    margin-top: 1.5rem;
+    margin-top: 26px;
 }
 
 .skills h3 {
-    margin-bottom: 0.5rem;
-    color: #667eea;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 14px;
+    font-weight: 500;
 }
 
 .skills ul {
@@ -228,79 +549,120 @@ nav {
 }
 
 .skills li {
-    background: white;
-    padding: 5px 15px;
+    background: var(--surface);
+    border: 1px solid var(--border-bright);
+    padding: 7px 16px;
     border-radius: 20px;
-    border: 1px solid #667eea;
-    color: #667eea;
+    font-size: 0.88rem;
+    color: var(--text);
+    transition: border-color 0.2s ease, color 0.2s ease;
 }
 
-.about-image img {
-    width: 100%;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+.skills li:hover {
+    border-color: var(--accent);
+    color: var(--accent);
 }
 
-/* بخش تماس */
+/* ============================
+   بخش تماس
+============================ */
 .contact {
-    padding: 80px 0;
-    background: #fff;
-    text-align: center;
+    padding: 90px 0 110px;
+    background: var(--bg-alt);
+    border-top: 1px solid var(--border);
 }
 
-.contact h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+    margin-top: 40px;
 }
 
-.contact-info {
+.contact-cmd {
     display: flex;
-    justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
-    margin-top: 3rem;
+    flex-direction: column;
+    gap: 10px;
+    padding: 22px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    transition: border-color 0.25s ease, transform 0.25s ease, background 0.25s ease;
 }
 
-.contact-item {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 15px;
-    min-width: 200px;
+.contact-cmd:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    background: var(--surface-2);
 }
 
-.contact-item h3 {
-    color: #667eea;
-    margin-bottom: 10px;
+.cmd-line {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    color: var(--text);
 }
 
-/* فوتر */
-footer {
-    background: #333;
-    color: white;
+.cmd-prompt {
+    color: var(--accent);
+    margin-left: 6px;
+}
+
+.cmd-value {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-dim);
+}
+
+/* ============================
+   فوتر
+============================ */
+.site-footer {
+    padding: 26px 20px;
     text-align: center;
-    padding: 20px;
+    border-top: 1px solid var(--border);
 }
 
-/* تنظیمات موبایل (واکنش‌گرا) */
-@media (max-width: 768px) {
-    .nav-links {
-        display: none;
-    }
-    
-    .hero-content h1 {
-        font-size: 1.8rem;
-    }
-    
-    .about-content {
+.footer-line {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-faint);
+}
+
+/* ============================
+   انیمیشن‌های ورود عمومی
+============================ */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ============================
+   ریسپانسیو
+============================ */
+@media (max-width: 900px) {
+    .hero-grid,
+    .about-grid {
         grid-template-columns: 1fr;
     }
-    
-    .projects-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .contact-info {
-        flex-direction: column;
-        align-items: center;
-    }
+
+    .about-visual { order: 2; }
+    .about-text { order: 1; }
+}
+
+@media (max-width: 600px) {
+    .hero { padding-top: calc(var(--header-height) + 40px); }
+    .terminal-body { font-size: 13px; padding: 18px 16px; }
+    .projects, .about, .contact { padding: 60px 0; }
+    .ide-tab { padding: 0 12px; font-size: 11.5px; }
 }
